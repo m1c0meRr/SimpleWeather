@@ -12,7 +12,7 @@ class MainViewController: UIViewController {
     
     private let locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "Moscow"
+//        label.text = "Moscow"
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 42, weight: .semibold)
@@ -23,7 +23,7 @@ class MainViewController: UIViewController {
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "18 semp 2023"
+//        label.text = "18 semp 2023"
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
@@ -34,7 +34,7 @@ class MainViewController: UIViewController {
     
     private let temperatureLabel: UILabel = {
         let label = UILabel()
-        label.text = "10 C˚℃"
+//        label.text = "10 C˚℃"
         label.textAlignment = .left
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 65, weight: .heavy)
@@ -54,7 +54,7 @@ class MainViewController: UIViewController {
     
     private let minTempLabel: UILabel = {
         let label = UILabel()
-        label.text = "5 ℃"
+//        label.text = "5 ℃"
         label.textAlignment = .left
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 25, weight: .regular)
@@ -65,7 +65,7 @@ class MainViewController: UIViewController {
     
     private let maxTempLabel: UILabel = {
         let label = UILabel()
-        label.text = "20 ℃"
+//        label.text = "20 ℃"
         label.textAlignment = .left
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
@@ -91,7 +91,11 @@ class MainViewController: UIViewController {
     }
     
     private func setupViews() {
-        view.backgroundColor = .white
+        
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise.circle"), style: .done, target: self, action: #selector(refreshButton)),
+        UIBarButtonItem(image: UIImage(systemName: "location.north.circle"), style: .done, target: self, action: #selector(addButton))]
+        
+        view.backgroundColor = .lightGray
         
         view.addSubview(locationLabel)
         view.addSubview(timeLabel)
@@ -100,6 +104,33 @@ class MainViewController: UIViewController {
         
         view.addSubview(minTempLabel)
         view.addSubview(maxTempLabel)
+    }
+    
+    //MARK: - @objc
+    
+    @objc func refreshButton() {
+        let city = UserDefaults.standard.string(forKey: "City") ?? ""
+        
+        fetchCurrentLocation(city: city)
+    }
+    
+    @objc func addButton() {
+        let alertController = UIAlertController(title: "Add city", message: "", preferredStyle: .alert)
+        
+        alertController.addTextField { (textField: UITextField) in
+            textField.placeholder = "Name city"
+        }
+        let action = UIAlertAction(title: "Add", style: .default) { alert in
+            let textField = alertController.textFields![0] as UITextField
+            let cityName = textField.text // передаем в функцию поиска города
+            self.fetchCurrentLocation(city: cityName ?? "Moscow")
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .default)
+        
+        alertController.addAction(action)
+        alertController.addAction(cancel)
+        
+        present(alertController, animated: true)
     }
     
     private func startUpdatingLocation() {
@@ -120,15 +151,51 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async {
                 self.locationLabel.text = weather.name
                 self.timeLabel.text = stringDate
-                self.temperatureLabel.text = String(weather.main.temp)
-                self.minTempLabel.text = String(weather.main.temp_min)
-                self.maxTempLabel.text = String(weather.main.temp_max)
+                self.temperatureLabel.text = String(weather.main.temp.kelvinToCelsius()) + " ℃"
+                self.minTempLabel.text = "Min: " + String(weather.main.temp_min.kelvinToCelsius()) + " ℃"
+                self.maxTempLabel.text = "Max: " + String(weather.main.temp_max.kelvinToCelsius()) + " ℃"
+                self.fetchImage(model: weather)
+                
+                UserDefaults.standard.set("\(weather.name ?? "")", forKey: "City")
             }
         }
     }
-//    private func locationManager(_ manager: CLLocationManager, didUpdateLocations location: [CLLocation]) {
-//
-//    }
+    
+    private func fetchCurrentLocation(city: String) {
+        weatherNetwork.fetchCurrentWeather(city: city) { (weather) in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            let stringDate = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(weather.dt)))
+            
+            DispatchQueue.main.async {
+                self.locationLabel.text = weather.name
+                self.timeLabel.text = stringDate
+                self.temperatureLabel.text = String(weather.main.temp.kelvinToCelsius()) + " ℃"
+                self.minTempLabel.text = "Min: " + String(weather.main.temp_min.kelvinToCelsius()) + " ℃"
+                self.maxTempLabel.text = "Max: " + String(weather.main.temp_max.kelvinToCelsius()) + " ℃"
+                self.fetchImage(model: weather)
+                
+                UserDefaults.standard.set("\(weather.name ?? "")", forKey: "City")
+            }
+        }
+    }
+    
+    func fetchImage(model: CurrentModel) {
+        guard let url = URL(string: "http://openweathermap.org/img/wn/\(model.weather[0].icon)@2x.png") else { return }
+        
+        weatherNetwork.requestImage(url: url) { [weak self] result in
+            
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                let image = UIImage(data: data)
+                self.symbolImage.image = image
+            case .failure(let error):
+                print("ОШИБКА", error)
+            }
+        }
+    }
+    
     
     //MARK: - setupConstraints
     
@@ -179,3 +246,5 @@ extension MainViewController: CLLocationManagerDelegate {
         fetchCoordinates(lat: latitude.description, lon: longitude.description)
     }
 }
+
+

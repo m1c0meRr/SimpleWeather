@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4790C62F2ABB4122004D25D5 /* Float + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4790C62E2ABB4122004D25D5 /* Float + Extension.swift */; };
+		4790C6312ABB46E7004D25D5 /* UIImageView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4790C6302ABB46E7004D25D5 /* UIImageView + Extension.swift */; };
 		47AD93AB2AB8A13000DF286E /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AD93AA2AB8A13000DF286E /* API.swift */; };
 		47AD93AD2AB8A2E400DF286E /* NetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AD93AC2AB8A2E400DF286E /* NetworkProtocol.swift */; };
 		47AD93B02AB8A3BD00DF286E /* CurrentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AD93AF2AB8A3BD00DF286E /* CurrentModel.swift */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4790C62E2ABB4122004D25D5 /* Float + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float + Extension.swift"; sourceTree = "<group>"; };
+		4790C6302ABB46E7004D25D5 /* UIImageView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extension.swift"; sourceTree = "<group>"; };
 		47AD93AA2AB8A13000DF286E /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		47AD93AC2AB8A2E400DF286E /* NetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocol.swift; sourceTree = "<group>"; };
 		47AD93AF2AB8A3BD00DF286E /* CurrentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentModel.swift; sourceTree = "<group>"; };
@@ -46,6 +50,8 @@
 		4790C62C2ABB3FC2004D25D5 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				4790C62E2ABB4122004D25D5 /* Float + Extension.swift */,
+				4790C6302ABB46E7004D25D5 /* UIImageView + Extension.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -87,9 +93,9 @@
 		47FAD3CC2AB893CB0061E319 /* SimpleWeather */ = {
 			isa = PBXGroup;
 			children = (
-				47AD93AE2AB8A3AB00DF286E /* Model */,
-				47AD93A92AB8A11A00DF286E /* Network */,
 				47FAD3E12AB895C50061E319 /* App */,
+				47AD93A92AB8A11A00DF286E /* Network */,
+				47AD93AE2AB8A3AB00DF286E /* Model */,
 				47FAD3D12AB893CB0061E319 /* MainViewController.swift */,
 				4790C62C2ABB3FC2004D25D5 /* Extension */,
 				47FAD3E22AB895D50061E319 /* Recources */,
@@ -186,6 +192,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4790C6312ABB46E7004D25D5 /* UIImageView + Extension.swift in Sources */,
+				4790C62F2ABB4122004D25D5 /* Float + Extension.swift in Sources */,
 				47FAD3D22AB893CB0061E319 /* MainViewController.swift in Sources */,
 				47FAD3CE2AB893CB0061E319 /* AppDelegate.swift in Sources */,
 				47AD93AD2AB8A2E400DF286E /* NetworkProtocol.swift in Sources */,
